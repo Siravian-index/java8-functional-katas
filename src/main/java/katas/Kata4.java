@@ -6,8 +6,10 @@ import model.BoxArt;
 import model.MovieList;
 import util.DataUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /*
     Goal: Retrieve id, title, and a 150x200 box art url for every video
@@ -18,6 +20,12 @@ public class Kata4 {
     public static List<Map> execute() {
         List<MovieList> movieLists = DataUtil.getMovieLists();
 
-        return ImmutableList.of(ImmutableMap.of("id", 5, "title", "Bad Boys", "boxart", new BoxArt(150, 200, "url")));
+        return movieLists.stream().flatMap(movieList -> movieList.getVideos().stream().map(movie -> {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("id", movie.getId());
+            map.put("title", movie.getTitle());
+            map.put("boxart", new BoxArt(150, 200, movie.getUri()));
+            return map;
+        })).collect(Collectors.toList());
     }
 }
