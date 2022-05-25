@@ -22,11 +22,10 @@ public class Kata4 {
 
         return movieLists.stream().flatMap(movieList -> movieList.getVideos().stream().map(movie -> {
             HashMap<String, String> map = new HashMap<>();
+            List<BoxArt> boxArtList = movie.getBoxarts().stream().filter(boxArt -> boxArt.getWidth() == 150 && boxArt.getHeight() == 200).collect(Collectors.toList());
             map.put("id", movie.getId().toString());
             map.put("title", movie.getTitle());
-            List<BoxArt> boxArtList = movie.getBoxarts().stream().filter(boxArt -> boxArt.getWidth() == 150 && boxArt.getHeight() == 200).collect(Collectors.toList());
-            map.put("boxart", boxArtList.get(0).toString());
-
+            map.put("boxart", boxArtList.get(0).getUrl());
             return map;
         })).collect(Collectors.toList());
     }
