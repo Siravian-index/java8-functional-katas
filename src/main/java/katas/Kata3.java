@@ -16,6 +16,14 @@ public class Kata3 {
     public static List<Integer> execute() {
         List<MovieList> movieLists = DataUtil.getMovieLists();
 
-        return movieLists.stream().flatMap(movieList -> movieList.getVideos().stream().map(Movie::getId)).collect(Collectors.toList());
+        return  movieLists.stream()
+                .map(movieList -> movieList.getVideos())
+                .flatMap(movies -> movies.stream())
+                .map(movie -> movie.getId())
+                .collect(Collectors.toList());
+
+//        return movieLists.stream()
+//                .flatMap(movieList -> movieList.getVideos().stream().map(Movie::getId))
+//                .collect(Collectors.toList());
     }
 }

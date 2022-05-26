@@ -7,6 +7,7 @@ import util.DataUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /*
@@ -18,15 +19,20 @@ public class Kata4 {
     public static List<Map> execute() {
         List<MovieList> movieLists = DataUtil.getMovieLists();
 
-        return movieLists.stream().flatMap(movieList -> movieList.getVideos().stream().map(movie -> {
-            HashMap<String, String> map = new HashMap<>();
-            List<BoxArt> boxArtList = movie.getBoxarts().stream()
-                    .filter(boxArt -> boxArt.getWidth() == 150 && boxArt.getHeight() == 200)
-                    .collect(Collectors.toList());
-            map.put("id", movie.getId().toString());
-            map.put("title", movie.getTitle());
-            map.put("boxart", boxArtList.get(0).getUrl());
-            return map;
-        })).collect(Collectors.toList());
+        return movieLists.stream()
+                .map(movieList -> movieList.getVideos())
+                .flatMap(movies -> movies.stream())
+                .map(movie -> {
+                    BoxArt boxArt1 = movie.getBoxarts().stream()
+                            .filter(boxArt -> boxArt.getWidth() == 150 && boxArt.getHeight() == 200)
+                            .findFirst()
+                            .orElseThrow();
+
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("title", movie.getTitle());
+                    map.put("id", movie.getId().toString());
+                    map.put("boxart", boxArt1.getUrl());
+                    return map;
+                }).collect(Collectors.toList());
     }
 }
