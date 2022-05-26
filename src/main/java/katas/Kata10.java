@@ -54,6 +54,10 @@ public class Kata10 {
     public static List<Map> execute() {
         List<Map> lists = DataUtil.getLists();
         List<Map> videos = DataUtil.getVideos();
+        System.out.println(lists);
+        System.out.println(videos);
+
+
 
         return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
                 ImmutableMap.of("id", 5, "title", "The Chamber"),
